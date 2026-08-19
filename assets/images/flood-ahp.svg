@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4d4d4"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+<rect width="1200" height="650" fill="url(#g)"/>
+<g opacity=".18" stroke="#a23b3b" stroke-width="2"><path d="M0 90 C250 20, 500 160, 1200 70" fill="none"/><path d="M0 170 C250 100, 500 240, 1200 150" fill="none"/><path d="M0 250 C250 180, 500 320, 1200 230" fill="none"/><path d="M0 330 C250 260, 500 400, 1200 310" fill="none"/><path d="M0 410 C250 340, 500 480, 1200 390" fill="none"/><path d="M0 490 C250 420, 500 560, 1200 470" fill="none"/><path d="M0 570 C250 500, 500 640, 1200 550" fill="none"/></g>
+<rect x="60" y="60" width="1080" height="530" rx="30" fill="none" stroke="#a23b3b" stroke-opacity=".18" stroke-width="2"/>
+<text x="90" y="270" font-family="Arial, sans-serif" font-size="64" font-weight="700" fill="#a23b3b">Flood Susceptibility</text>
+<text x="92" y="335" font-family="Arial, sans-serif" font-size="30" fill="#334155">AHP • GIS • MCDA</text>
+<text x="92" y="520" font-family="Arial, sans-serif" font-size="22" letter-spacing="4" fill="#a23b3b" opacity=".8">GEOSPATIAL RESEARCH PORTFOLIO</text>
+</svg>

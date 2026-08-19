@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gokul R. Kamath — Geospatial Research Portfolio</title>
+<meta name="description" content="Geospatial research portfolio of Gokul R. Kamath — remote sensing, disaster risk, GIS, geospatial AI, and reproducible Earth-observation workflows.">
+<meta name="author" content="Gokul R. Kamath">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ Tokens ============ */
+:root{
+  --paper:#f6f2e8;
+  --paper-raise:#efe8d7;
+  --ink:#16241c;
+  --ink-soft:#4a564d;
+  --line:#dcd1b4;
+  --contour:#2f6f5e;
+  --contour-deep:#1f4d40;
+  --contour-tint:rgba(47,111,94,.10);
+  --amber:#c1701f;
+  --amber-tint:rgba(193,112,31,.12);
+  --river:#3b6ea5;
+  --card:#fffdf7;
+  --shadow:0 14px 40px rgba(22,36,28,.10);
+  --radius:16px;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  color-scheme: light;
+}
+html[data-theme="dark"]{
+  --paper:#0e1712;
+  --paper-raise:#152019;
+  --ink:#eef2ec;
+  --ink-soft:#a9b7ac;
+  --line:#28362c;
+  --contour:#5fb79b;
+  --contour-deep:#8fd9c0;
+  --contour-tint:rgba(95,183,155,.12);
+  --amber:#e2953f;
+  --amber-tint:rgba(226,149,63,.14);
+  --river:#7aa9d8;
+  --card:#131f18;
+  --shadow:0 14px 40px rgba(0,0,0,.35);
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s ease, color .3s ease;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem);}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;letter-spacing:-.02em;margin:0;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--contour);
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin-bottom:.9rem;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--contour);display:inline-block;}
+.coord{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-soft);letter-spacing:.02em;}
+section{padding:5.5rem 0;position:relative;}
+.section-head{max-width:680px;margin-bottom:2.75rem;}
+.section-head p{color:var(--ink-soft);font-size:1.02rem;margin:.9rem 0 0;}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ============ Contour texture ============ */
+.contour-bg{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;opacity:.35;
+}
+.contour-bg svg{width:100%;height:100%;}
+.ridge-divider{width:100%;display:block;line-height:0;}
+.ridge-divider svg{width:100%;height:64px;display:block;}
+
+/* ============ Nav ============ */
+header.site-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:.9rem clamp(1.25rem,4vw,2.5rem);max-width:1180px;margin:0 auto;}
+.brand{display:flex;flex-direction:column;gap:.15rem;text-decoration:none;}
+.brand-mark{font-family:var(--font-display);font-weight:700;font-size:1.05rem;letter-spacing:.02em;}
+.brand-mark span{color:var(--contour);}
+.brand-sub{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.12em;color:var(--ink-soft);text-transform:uppercase;}
+nav.links{display:flex;align-items:center;gap:2rem;}
+nav.links a{
+  font-family:var(--font-mono);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink-soft);position:relative;padding:.3rem 0;transition:color .2s ease;
+}
+nav.links a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:2px;background:var(--contour);transition:right .25s ease;}
+nav.links a:hover,nav.links a.active{color:var(--ink);}
+nav.links a.active::after{right:0;}
+.theme-toggle{
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.9rem;transition:transform .2s ease, border-color .2s ease;
+}
+.theme-toggle:hover{border-color:var(--contour);transform:rotate(20deg);}
+.nav-toggle{display:none;background:none;border:1px solid var(--line);border-radius:8px;width:38px;height:38px;color:var(--ink);cursor:pointer;}
+
+/* ============ Buttons ============ */
+.btn{
+  font-family:var(--font-mono);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.35rem;border-radius:999px;
+  text-decoration:none;border:1px solid var(--line);color:var(--ink);transition:all .22s ease;white-space:nowrap;
+}
+.btn:hover{border-color:var(--contour);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08);}
+.btn-primary{background:var(--contour);border-color:var(--contour);color:#fdfcf6;}
+.btn-primary:hover{background:var(--contour-deep);border-color:var(--contour-deep);}
+.btn-ghost{background:transparent;}
+
+/* ============ Hero ============ */
+.hero{padding:9.5rem 0 5rem;position:relative;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:3.5rem;align-items:center;position:relative;z-index:1;}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);line-height:1.02;margin:.4rem 0 1.1rem;}
+.hero-title{font-size:1.28rem;color:var(--ink-soft);max-width:600px;margin:0 0 1rem;font-weight:500;}
+.hero-title strong{color:var(--ink);font-weight:600;}
+.hero-text{color:var(--ink-soft);max-width:560px;font-size:1rem;}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem;}
+.hero-photo-frame{
+  position:relative;width:min(280px,80%);margin-left:auto;aspect-ratio:1/1;
+  border-radius:50%;padding:10px;
+  background:conic-gradient(from 180deg, var(--contour), var(--river), var(--amber), var(--contour));
+}
+.hero-photo-frame img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:6px solid var(--paper);}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:3.25rem;background:var(--line);gap:1px;position:relative;z-index:1;}
+.hero-stats div{background:var(--card);padding:1.15rem 1.3rem;}
+.hero-stats strong{display:block;font-family:var(--font-display);font-size:1rem;}
+.hero-stats span{display:block;font-size:.78rem;color:var(--ink-soft);margin-top:.25rem;}
+
+/* ============ Research ============ */
+.research-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:3rem;}
+.rcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.5rem;transition:transform .25s ease, box-shadow .25s ease;}
+.rcard:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.rcard .icon{font-size:1.5rem;margin-bottom:.75rem;}
+.rcard h3{font-size:1.02rem;margin-bottom:.5rem;}
+.rcard p{font-size:.88rem;color:var(--ink-soft);margin:0;}
+
+.research-body{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:start;}
+.research-body h3{font-size:1.15rem;margin-bottom:.75rem;}
+.research-body p{color:var(--ink-soft);}
+.theme-list{list-style:none;margin:1.25rem 0;padding:0;display:grid;gap:.65rem;}
+.theme-list li{font-size:.94rem;padding-left:1.2rem;position:relative;}
+.theme-list li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:var(--amber);}
+.theme-list b{color:var(--ink);}
+.case-card{background:var(--paper-raise);border:1px solid var(--line);border-radius:var(--radius);padding:1.75rem;}
+.case-card .coord{display:block;margin-bottom:.5rem;}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem;}
+.chip{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.02em;color:var(--ink-soft);
+  border:1px solid var(--line);padding:.28rem .65rem;border-radius:999px;background:var(--card);
+}
+.talk-card{margin-top:1.5rem;border-left:3px solid var(--amber);padding:.25rem 0 .25rem 1.1rem;}
+.talk-card .coord{color:var(--amber);}
+.talk-card p{margin:.4rem 0 0;font-style:italic;color:var(--ink-soft);font-size:.92rem;}
+
+/* ============ Academic projects ============ */
+.thesis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;}
+.thesis-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;display:flex;flex-direction:column;gap:.85rem;}
+.thesis-card h3{font-size:1.02rem;line-height:1.3;}
+.thesis-meta{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-soft);display:flex;flex-direction:column;gap:.2rem;letter-spacing:.02em;}
+.thesis-card p{font-size:.88rem;color:var(--ink-soft);margin:0;}
+.thesis-card .finding{font-size:.85rem;border-top:1px dashed var(--line);padding-top:.75rem;margin-top:.2rem;}
+.thesis-card .finding b{display:block;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--contour);margin-bottom:.35rem;}
+
+/* ============ Projects ============ */
+.repo-link{font-family:var(--font-mono);font-size:.76rem;text-decoration:none;color:var(--contour);display:inline-flex;align-items:center;gap:.35rem;}
+.repo-link:hover{text-decoration:underline;}
+.more-repos{text-align:center;margin-top:2.5rem;}
+.feat-row{
+  display:grid;grid-template-columns:2.2rem 1fr auto;gap:1.1rem;align-items:start;
+  padding:1rem 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;
+  transition:padding-left .2s ease, background .2s ease;
+}
+.feat-row:hover{padding-left:.5rem;background:var(--contour-tint);}
+.feat-row .idx{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-soft);padding-top:.15rem;}
+.feat-row .info h4{font-family:var(--font-body);font-weight:600;font-size:.98rem;margin-bottom:.3rem;}
+.feat-row .info p{font-size:.84rem;color:var(--ink-soft);margin:0 0 .55rem;max-width:640px;}
+.feat-row .arrow{font-family:var(--font-mono);font-size:.9rem;color:var(--contour);padding-top:.15rem;}
+
+/* ============ Catalogue ============ */
+.catalogue-group{margin-bottom:2.5rem;}
+.catalogue-group h3{font-family:var(--font-mono);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line);}
+.repo-row{
+  display:grid;grid-template-columns:2.2rem 1fr auto;gap:1rem;align-items:start;
+  padding:1rem 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;
+  transition:padding-left .2s ease, background .2s ease;
+}
+.repo-row:hover{padding-left:.5rem;background:var(--contour-tint);}
+.repo-row .idx{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-soft);padding-top:.15rem;}
+.repo-row .info h4{font-family:var(--font-body);font-weight:600;font-size:.98rem;margin-bottom:.3rem;}
+.repo-row .info p{font-size:.84rem;color:var(--ink-soft);margin:0 0 .55rem;max-width:640px;}
+.repo-row .arrow{font-family:var(--font-mono);font-size:.9rem;color:var(--contour);padding-top:.15rem;}
+
+/* ============ Experience ============ */
+.exp-layout{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;}
+.timeline{list-style:none;margin:0;padding:0;border-left:2px solid var(--line);}
+.timeline li{position:relative;padding:0 0 2.1rem 1.75rem;}
+.timeline li::before{content:"";position:absolute;left:-6.5px;top:.35rem;width:11px;height:11px;border-radius:50%;background:var(--paper);border:2px solid var(--contour);}
+.timeline li:last-child{padding-bottom:0;}
+.timeline h4{font-size:1rem;margin-bottom:.15rem;}
+.timeline .coord{display:block;margin-bottom:.5rem;}
+.timeline p{font-size:.9rem;color:var(--ink-soft);margin:0;}
+.edu-block{margin-bottom:1.75rem;padding-bottom:1.75rem;border-bottom:1px dashed var(--line);}
+.edu-block:last-child{border-bottom:none;}
+.edu-block h4{font-size:1rem;margin-bottom:.2rem;}
+.edu-block .coord{display:block;margin-bottom:.45rem;}
+.edu-block p{font-size:.9rem;color:var(--ink-soft);margin:0;}
+.cert-list{list-style:none;margin:0;padding:0;font-size:.9rem;color:var(--ink-soft);display:grid;gap:.5rem;}
+.cert-list li{padding-left:1.1rem;position:relative;}
+.cert-list li::before{content:"✓";position:absolute;left:0;color:var(--contour);font-family:var(--font-mono);font-size:.8rem;}
+
+/* ============ Contact ============ */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;}
+.ccard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.75rem;text-align:left;text-decoration:none;color:inherit;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;}
+.ccard:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--contour);}
+.ccard .icon{font-size:1.4rem;margin-bottom:.9rem;}
+.ccard h3{font-size:.98rem;margin-bottom:.35rem;}
+.ccard span{font-family:var(--font-mono);font-size:.8rem;color:var(--contour);word-break:break-word;}
+.contact-cta{margin-top:2.5rem;padding:2.25rem;border-radius:20px;background:var(--contour);color:#fdfcf6;display:flex;justify-content:space-between;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.contact-cta h3{font-size:1.3rem;color:#fdfcf6;}
+.contact-cta p{margin:.4rem 0 0;color:rgba(253,252,246,.82);font-size:.92rem;}
+.contact-cta .btn{border-color:rgba(253,252,246,.5);color:#fdfcf6;}
+.contact-cta .btn:hover{background:rgba(253,252,246,.15);}
+
+/* ============ Footer ============ */
+footer{border-top:1px solid var(--line);padding:2.5rem 0;}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-inner .coord{opacity:.8;}
+.footer-links{display:flex;gap:1.25rem;}
+.footer-links a{font-family:var(--font-mono);font-size:.78rem;text-decoration:none;color:var(--ink-soft);}
+.footer-links a:hover{color:var(--contour);}
+
+/* ============ Responsive ============ */
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;}
+  .hero-photo-frame{margin:0 0 1rem;width:180px;}
+  .research-grid{grid-template-columns:repeat(2,1fr);}
+  .research-body{grid-template-columns:1fr;}
+  .thesis-grid{grid-template-columns:1fr;}
+  .exp-layout{grid-template-columns:1fr;gap:3rem;}
+  .contact-grid{grid-template-columns:1fr;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:640px){
+  .feat-row,.repo-row{grid-template-columns:2.4rem 1fr;}
+  .feat-row .arrow,.repo-row .arrow{display:none;}
+}
+@media (max-width:760px){
+  nav.links{display:none;}
+  .nav-toggle{display:flex;align-items:center;justify-content:center;}
+  header.site-nav.open nav.links{
+    display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;
+    background:var(--paper);padding:1.25rem;border-bottom:1px solid var(--line);gap:1.1rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">GOKUL R. <span>KAMATH</span></span>
+      <span class="brand-sub">Geospatial Research</span>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="#research" data-nav>Research</a>
+      <a href="#projects" data-nav>Projects</a>
+      <a href="#catalogue" data-nav>Repositories</a>
+      <a href="#publications" data-nav>Publications</a>
+      <a href="#experience" data-nav>Experience</a>
+      <a href="#contact" data-nav>Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="contour-bg" aria-hidden="true">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="none">
+      <g fill="none" stroke="currentColor" style="color:var(--contour)" stroke-width="1.1">
+        <path opacity=".18" d="M-50 120 C 200 40, 450 200, 700 100 S 1150 60 1300 140"/>
+        <path opacity=".16" d="M-50 200 C 220 110, 470 280, 720 190 S 1150 150 1300 230"/>
+        <path opacity=".14" d="M-50 280 C 240 180, 490 360, 740 280 S 1150 240 1300 320"/>
+        <path opacity=".12" d="M-50 360 C 260 250, 510 440, 760 360 S 1150 330 1300 410"/>
+        <path opacity=".10" d="M-50 440 C 280 330, 530 520, 780 440 S 1150 420 1300 500"/>
+        <path opacity=".08" d="M-50 520 C 300 410, 550 600, 800 520 S 1150 510 1300 590"/>
+      </g>
+    </svg>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <div class="eyebrow">Geospatial Research · Earth Observation · Disaster Risk</div>
+      <h1>Gokul R.<br>Kamath</h1>
+      <p class="coord" style="margin-bottom:1.1rem;display:block;">29.8656° N, 77.8965° E — CoEDMM, IIT Roorkee</p>
+      <p class="hero-title">Geospatial researcher working at the intersection of <strong>remote sensing, disaster risk &amp; geospatial AI</strong>.</p>
+      <p class="hero-text">I build reproducible workflows that turn satellite, climate, terrain, and spatial data into evidence for understanding environmental hazards and their impacts on communities.</p>
+      <div class="hero-actions">
+        <a href="#research" class="btn btn-primary">Explore research →</a>
+        <a href="#projects" class="btn">View projects</a>
+        <a href="https://github.com/gokulrk06" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="hero-photo-frame reveal in">
+      <img src="assets/images/profile.png" alt="Gokul R. Kamath">
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="hero-stats reveal in">
+      <div><strong>Remote Sensing</strong><span>Earth observation &amp; time series</span></div>
+      <div><strong>Disaster Risk</strong><span>Hazard · Exposure · Vulnerability</span></div>
+      <div><strong>Geospatial AI</strong><span>ML &amp; probabilistic modelling</span></div>
+      <div><strong>Open Workflows</strong><span>Python · GEE · GIS · Web GIS</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="ridge-divider" aria-hidden="true">
+  <svg viewBox="0 0 1200 64" preserveAspectRatio="none"><path d="M0 40 L100 22 L220 48 L360 10 L480 38 L620 16 L760 44 L900 20 L1040 42 L1200 24 L1200 64 L0 64 Z" fill="var(--paper-raise)"/></svg>
+</div>
+
+<!-- ===================== RESEARCH ===================== -->
+<section id="research" style="background:var(--paper-raise);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Research Focus</div>
+      <h2>What I study, and how I study it</h2>
+    </div>
+
+    <div class="research-grid">
+      <div class="rcard reveal"><div class="icon">⛰️</div><h3>Disaster Risk</h3><p>Landslide and flood risk assessment using hazard, exposure, vulnerability, and resource-based indicators.</p></div>
+      <div class="rcard reveal"><div class="icon">🛰️</div><h3>Remote Sensing</h3><p>Satellite image processing, NDVI/NDWI, land-cover change, phenology, precipitation, and Earth-observation time series.</p></div>
+      <div class="rcard reveal"><div class="icon">🧠</div><h3>Geospatial AI</h3><p>Machine learning, clustering, spatial modelling, Bayesian networks, and interpretable risk analysis.</p></div>
+      <div class="rcard reveal"><div class="icon">⌗</div><h3>Reproducible Computing</h3><p>Python, GeoPandas, Rasterio, Xarray, Google Earth Engine, QGIS, ArcGIS Pro, and Streamlit applications.</p></div>
+    </div>
+
+    <div class="research-body reveal">
+      <div>
+        <h3>Landslide risk </h3>
+        <p>My current research explores how landslide risk can be assessed by integrating hazard, exposure, and resource-based vulnerability — rather than treating susceptibility alone as a proxy for risk. The work uses geospatial datasets, remote sensing, statistical modelling, machine learning, and probabilistic approaches to understand how environmental hazards intersect with communities.</p>
+        <ul class="theme-list">
+          <li><b>Hazard</b> — landslide susceptibility and spatial hazard characterization</li>
+          <li><b>Exposure</b> — settlements, infrastructure, population, and built environment</li>
+          <li><b>Vulnerability</b> — resource-based indicators and community capacity</li>
+          <li><b>Risk modelling</b> — probabilistic and Bayesian-network approaches</li>
+          <li><b>Earth observation</b> — satellite-derived environmental indicators and change detection</li>
+        </ul>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">Google Earth Engine</span><span class="chip">GeoPandas</span>
+          <span class="chip">Rasterio</span><span class="chip">Xarray</span><span class="chip">Scikit-learn</span>
+          <span class="chip">PyMC / pgmpy</span><span class="chip">QGIS</span><span class="chip">ArcGIS Pro</span>
+        </div>
+      </div>
+      <div>
+        <div class="case-card">
+          <span class="coord">30.7268° N, 78.4354° E</span>
+          <h3>Case study — Uttarkashi, Uttarakhand</h3>
+          <p>The Uttarkashi work brings together hazard information with settlement and resource-based vulnerability indicators to produce a more context-aware view of landslide risk.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ACADEMIC PROJECTS ===================== -->
+<section id="academic">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Academic &amp; Thesis Work</div>
+      <h2>Dissertations &amp; module projects</h2>
+      <p>Independent research completed during the PGD in Geoinformatics and GIS-trainee coursework — the groundwork for the current disaster-risk research direction.</p>
+    </div>
+    <div class="thesis-grid">
+      <div class="thesis-card reveal">
+        <h3>Flood Susceptibility Mapping using GIS-AHP: Periyar Basin</h3>
+        <div class="thesis-meta">
+          <span>PERIYAR BASIN, KERALA · 2022</span>
+          <span>SOLO PROJECT — DISSERTATION</span>
+        </div>
+        <p>Combined the Analytical Hierarchy Process with GIS and remote sensing across 4 flood-causing criteria (hydrological, morphometric, permeability, LULC) and 8 sub-criteria layers to map flood risk zones for preparedness planning.</p>
+        <div class="finding"><b>Key finding</b>Produced a 5-class flood susceptibility map using a reproducible AHP-based multi-criteria workflow.</div>
+      </div>
+      <div class="thesis-card reveal">
+        <h3>Phenology-Based Classification of Vegetation Using NDVI Datasets</h3>
+        <div class="thesis-meta">
+          <span>UTTARAKHAND, INDIA · 2023</span>
+          <span>SOLO PROJECT — PGD THESIS</span>
+        </div>
+        <p>Extracted vegetation phenology metrics from an 22-year MODIS 16-day NDVI time series (2000–2022) using signal processing, then applied unsupervised clustering to classify statewide land cover,an automated workflow for classification.</p>
+        <div class="finding"><b>Key finding</b>Two independent phenology-based classification maps benchmarked against Bhuvan LULC and MODIS Type-1 Land Cover.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ridge-divider" aria-hidden="true">
+  <svg viewBox="0 0 1200 64" preserveAspectRatio="none"><path d="M0 40 L100 22 L220 48 L360 10 L480 38 L620 16 L760 44 L900 20 L1040 42 L1200 24 L1200 64 L0 64 Z" fill="var(--paper-raise)"/></svg>
+</div>
+
+<!-- ===================== FEATURED PROJECTS ===================== -->
+<section id="projects" style="background:var(--paper-raise);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Featured Work</div>
+      <h2>Selected projects</h2>
+      <p>A curated selection spanning remote sensing, geospatial analysis, disaster risk, climate data, machine learning, and web GIS — from Earth-observation data to usable geospatial applications.</p>
+    </div>
+
+    <div id="projectGrid"></div>
+
+    <div class="more-repos reveal">
+      <a href="#catalogue" class="btn btn-primary">See all repositories →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FULL CATALOGUE ===================== -->
+<section id="catalogue">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Complete Catalogue</div>
+      <h2>Additional applications</h2>
+      <p>Beyond the featured work above, this catalogue includes further research workflows and geospatial applications.</p>
+    </div>
+
+    <div class="catalogue-group reveal">
+      <div id="catalogueResearch"></div>
+    </div>
+  </div>
+</section>
+
+<div class="ridge-divider" aria-hidden="true">
+  <svg viewBox="0 0 1200 64" preserveAspectRatio="none"><path d="M0 40 L100 22 L220 48 L360 10 L480 38 L620 16 L760 44 L900 20 L1040 42 L1200 24 L1200 64 L0 64 Z" fill="var(--paper-raise)"/></svg>
+</div>
+
+<!-- ===================== PUBLICATIONS ===================== -->
+<section id="publications" style="background:var(--paper-raise);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Publications &amp; Presentations</div>
+      <h2>Publications</h2>
+      <p>Research presented at conferences and forums, and work currently in preparation.</p>
+    </div>
+
+    <ul class="timeline" id="pubList" style="border-left:2px solid var(--line);"></ul>
+  </div>
+</section>
+
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience" style="background:var(--paper-raise);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Experience &amp; Education</div>
+      <h2>Background</h2>
+    </div>
+
+    <div class="exp-layout">
+      <div class="reveal">
+        <h3 style="font-size:1.05rem;margin-bottom:1.5rem;">Work experience</h3>
+        <ul class="timeline">
+          <li>
+            <h4>Technical Associate — Forest Survey of India</h4>
+            <span class="coord">FEB 2023 – JAN 2024 · DEHRADUN, INDIA</span>
+            <p>Applied GIS and remote sensing techniques using ArcGIS, QGIS, and Python for forest survey and geospatial data analysis.</p>
+          </li>
+          <li>
+            <h4>GIS Trainee — GIS Vision India</h4>
+            <span class="coord">JUL 2022 – NOV 2022 · ADVANCED GIS DEVELOPMENT TRAINING</span>
+            <p>Integrated GIS analyses into spatial problem-solving, produced detailed maps, evaluated data quality within ArcGIS, and completed the dissertation "Flood Susceptibility Mapping using GIS-AHP: Periyar Basin."</p>
+          </li>
+        </ul>
+
+        <h3 style="font-size:1.05rem;margin:2.5rem 0 1.25rem;">Certifications</h3>
+        <ul class="cert-list">
+          <li>GATE — Geomatics Engineering, 2023 (AIR: 202, Score: 438)</li>
+          <li>Python for Data Science — IIT Madras, NPTEL/SWAYAM, 2020</li>
+        </ul>
+      </div>
+
+      <div class="reveal">
+        <h3 style="font-size:1.05rem;margin-bottom:1.5rem;">Education</h3>
+
+        <div class="edu-block">
+          <h4>Doctor of Philosophy (Ph.D.), in progress</h4>
+          <span class="coord">CENTRE OF EXCELLENCE IN DISASTER MITIGATION AND MANAGEMENT (CoEDMM), IIT ROORKEE · PRESENT</span>
+          <p>Researching at the intersection of GIS, remote sensing, and disaster risk analytics.</p>
+        </div>
+
+        <div class="edu-block">
+          <h4>Post Graduate Diploma in Geoinformatics</h4>
+          <span class="coord">INDIAN INSTITUTE OF REMOTE SENSING (IIRS), DEHRADUN · 2022–2023 </span>
+          <p>Geo-information Science and Earth Observation specialization, jointly offered with ITC University of Twente. Coursework: Remote Sensing &amp; GIS, Geoinformatics, Disaster Management, Programming for Geo-applications.</p>
+        </div>
+
+        <div class="edu-block">
+          <h4>M.Sc. Physics</h4>
+          <span class="coord">MAR IVANIOS COLLEGE, TRIVANDRUM (UNIVERSITY OF KERALA) · 2017–2019 </span>
+        </div>
+
+        <div class="edu-block">
+          <h4>B.Sc. Physics</h4>
+          <span class="coord">ST. XAVIER'S COLLEGE, VAIKOM (M.G. UNIVERSITY, KERALA) · 2014–2017</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ===================== HOBBIES ===================== -->
+<section id="hobbies">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Beyond Research</div>
+      <h2>Hobbies</h2>
+      <p>A few things I spend time on outside fieldwork and code.</p>
+    </div>
+
+    <div class="research-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="rcard reveal">
+        <div class="icon">🚶</div>
+        <h3>Walking</h3>
+        <p>Long walks — a simple way to think, unwind, and notice the landscape at ground level.</p>
+      </div>
+      <div class="rcard reveal">
+        <div class="icon">🧭</div>
+        <h3>Solo Travelling</h3>
+        <p>Exploring new places independently, at my own pace, off the usual itinerary.</p>
+      </div>
+      <div class="rcard reveal">
+        <div class="icon">✂️</div>
+        <h3>Handicrafts</h3>
+        <p>Working with my hands on small handicraft projects — a slow, offline counterpart to geospatial work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Contact</div>
+      <h2>Let's connect</h2>
+      <p>Open to research collaborations, geospatial projects, conference discussions, and academic opportunities related to remote sensing, disaster risk, and geospatial AI.</p>
+    </div>
+
+    <div class="contact-grid reveal">
+      <a class="ccard" href="mailto:gokulrajkamath96@gmail.com">
+        <div class="icon">✉</div>
+        <h3>Email</h3>
+        <span>gokulrajkamath96@gmail.com</span>
+      </a>
+      <a class="ccard" href="https://github.com/gokulrk06" target="_blank" rel="noopener">
+        <div class="icon">⌥</div>
+        <h3>GitHub</h3>
+        <span>github.com/gokulrk06</span>
+      </a>
+      <a class="ccard" href="https://www.linkedin.com/in/gokul-r-kamath-33bb381b2" target="_blank" rel="noopener">
+        <div class="icon">in</div>
+        <h3>LinkedIn</h3>
+        <span>Gokul R. Kamath</span>
+      </a>
+    </div>
+
+    <div class="contact-cta reveal">
+      <div>
+        <h3>Have a project or paper in mind?</h3>
+        <p>Drop me an email — I usually reply within a couple of days.</p>
+      </div>
+      <a href="mailto:gokulrajkamath96@gmail.com" class="btn">Say hello →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span class="coord">© Gokul R. Kamath · Built with a single HTML file, no build step required</span>
+    <div class="footer-links">
+      <a href="mailto:gokulrajkamath96@gmail.com">Email</a>
+      <a href="https://github.com/gokulrk06" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/gokul-r-kamath-33bb381b2" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#top">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ Data ============ */
+const FEATURED = [
+  {img:"high-resolution-imagery.svg", title:"High-Resolution Satellite Imagery Downloader", desc:"A Python workflow for acquiring high-resolution RGB imagery from web tiles, mosaicking the required tiles, clipping to an area of interest, and exporting georeferenced raster products.", tags:["Python","Remote Sensing","Rasterio","Satellite Imagery","GeoTIFF"], url:"https://github.com/gokulrk06/ExplorerDiaries--Downloading-High-resolution-Imagery"},
+  {img:"ndwi-brahmaputra.svg", title:"Annual Surface Water Monitoring of the Brahmaputra Using NDWI", desc:"A Google Earth Engine and Python workflow for deriving annual surface-water information from Sentinel-2 imagery using NDWI, with cloud masking and temporal analysis.", tags:["NDWI","Sentinel-2","Google Earth Engine","Python","Water Mapping"], url:"https://github.com/gokulrk06/Explorer-Diaries--Python-for-GIS-NDWI-Brahmaputra"},
+  {img:"dharali-phenology.svg", title:"Vegetation Phenology as a Disaster Impact Indicator — Dharali 2025", desc:"A Sentinel-2 NDVI time-series case study examining abrupt vegetation changes around the 2025 Dharali event in Uttarkashi, Uttarakhand.", tags:["NDVI","Phenology","Sentinel-2","Disaster Assessment","Uttarkashi"], url:"https://github.com/gokulrk06/ExplorerDiaries--Python-for-GIS-Phenology-case-study-beginner"},
+  {img:"opentopo-api.svg", title:"Automated DEM Acquisition Using the OpenTopography API", desc:"A Python workflow for requesting digital elevation data from the OpenTopography API using a geographic bounding box and exporting the result as a GeoTIFF.", tags:["Python","OpenTopography","DEM","API","GeoTIFF"], url:"https://github.com/gokulrk06/Open_Topography_Data_Download-_from_API"},
+  {img:"lulc-change.svg", title:"Land-Cover Change Detection in Uttarkashi Using 10 m LULC Data", desc:"A Google Earth Engine and Python workflow for comparing annual 10 m land-cover products, quantifying class transitions, and visualizing landscape change.", tags:["LULC","Change Detection","Google Earth Engine","Uttarkashi"], url:"https://github.com/gokulrk06/ExplorerDiaries-Python-for-GIS-Change-detection"},
+  {img:"hydrology-3d.svg", title:"3D Terrain Visualization & Hydrological Analysis Using SRTM DEM", desc:"A Python workflow for DEM-based terrain and hydrological analysis — slope, aspect, hillshade, flow direction, flow accumulation, catchment delineation, and 3D terrain visualization.", tags:["DEM","SRTM","Hydrology","3D GIS","PySheds"], url:"https://github.com/gokulrk06/ExplorerDiaries-Python-for-GIS-Hydrology-part-2-3d-viz"},
+  {img:"supervised-classification.svg", title:"Supervised Land-Cover Classification Using Sentinel-2", desc:"An end-to-end machine-learning workflow for preparing Sentinel-2 imagery, training a supervised classifier, generating a land-cover map, and evaluating performance.", tags:["Machine Learning","Sentinel-2","Land Cover","Scikit-learn"], url:"https://github.com/gokulrk06/ExploreDiaries-Python_for_gis_Raster_supervised_classifiation"},
+  {img:"gee-xarray-raster.svg", title:"Satellite Raster Processing with Google Earth Engine and Xarray", desc:"A bridge between Google Earth Engine and Python/Xarray for interactive multispectral raster analysis, RGB/false-colour composites, and NDVI.", tags:["Google Earth Engine","Xarray","XEE","Sentinel-2","NDVI"], url:"https://github.com/gokulrk06/ExplorerDiaries-Python_for-GIS-Raster"},
+  {img:"imerg.svg", title:"GPM IMERG Precipitation Analysis: Google Earth Engine to Python", desc:"A beginner-friendly workflow for bringing GPM IMERG precipitation data from Google Earth Engine into Python/Xarray for spatial and temporal rainfall analysis.", tags:["GPM IMERG","Precipitation","Google Earth Engine","Xarray"], url:"https://github.com/gokulrk06/ExplorerDiaries-IMERG_Rainfall_analysis_GEE_to_python_XEE"},
+  {img:"imd-trend.svg", title:"Long-Term Rainfall Trend Analysis Using IMD Data", desc:"A spatial and temporal analysis workflow investigating rainfall variability and trends from gridded India Meteorological Department rainfall data.", tags:["IMD","Rainfall","Climate Analysis","Kerala"], url:"https://github.com/gokulrk06/ExplorerDiaries--IMD_Rainfall_Trend-analysis"},
+];
+
+const CATALOGUE_RESEARCH = [
+  {title:"GitHub Research Profile & Open-Source Geospatial Work", desc:"The profile repository documents the research focus, tools, and open-source geospatial work presented across the account.", tags:["GitHub","Remote Sensing","GIS"], url:"https://github.com/gokulrk06/gokulrk06"},
+  {title:"Crop Pattern Analysis Using Vegetation Phenology", desc:"A Python-based remote-sensing workflow introducing temporal vegetation signals and their use in understanding crop-growth and phenological patterns.", tags:["NDVI","Phenology","Agriculture"], url:"https://github.com/gokulrk06/ExplorerDiaries--Python-for-GIS-Vegetation-Phenology-Introduction-2"},
+  {title:"Vegetation Phenology Monitoring Using NDVI", desc:"An introductory workflow for preparing and visualizing vegetation NDVI time series and understanding seasonal vegetation dynamics.", tags:["NDVI","Vegetation Phenology"], url:"https://github.com/gokulrk06/Explorer-Diaries--Python-for-GIS-Vegetation-Phenology-Introduction"},
+  {title:"Python-Based Hydrological Data Analysis", desc:"A practical Python workflow introducing hydrological geospatial data processing, analysis, and visualization.", tags:["Python","Hydrology","Water Resources"], url:"https://github.com/gokulrk06/ExplorerDiaries-Python_for_gis_Hydrology"},
+  {title:"Unsupervised Land-Cover Classification Using K-Means", desc:"A raster-analysis workflow using K-means clustering to identify spatially distinct land-cover patterns without predefined training labels.", tags:["K-Means","Unsupervised Classification"], url:"https://github.com/gokulrk06/ExplorerDiaries--Raster-analysis--Kmeans-clustering"},
+  {title:"Vector Geospatial Analysis with Python", desc:"A practical GeoPandas workflow covering vector data loading, geometry operations, overlays, clipping, visualization, and interactive web mapping.", tags:["GeoPandas","Vector GIS","Folium"], url:"https://github.com/gokulrk06/ExplorerDiaries-Python-for-GIS_introduction"},
+  {title:"Interactive India Census Mapping with Folium", desc:"A browser-based geovisualization workflow combining India state boundaries with demographic data to create an interactive choropleth map.", tags:["Folium","Web GIS","Census"], url:"https://github.com/gokulrk06/ExplorerDiaries-HTML_Page_part_1_Geo_viz"},
+  {title:"IMD Gridded Rainfall Data Processing for Kerala", desc:"A Python workflow for handling gridded daily IMD rainfall data, clipping it to a study region, and preparing it for climate and hydrological analysis.", tags:["IMD","NetCDF","Climate Data"], url:"https://github.com/gokulrk06/ExplorerDiaries-IMD-Rainfall_data_analysis"},
+  {title:"NDMA Alert Frequency Analysis", desc:"A Python workflow for exploring the temporal frequency and distribution of disaster-related alerts and identifying patterns in warning events.", tags:["NDMA","Disaster Management","SMS Analysis"], url:"https://github.com/gokulrk06/ExplorerDiaries--SMS-Analysis-"},
+  {title:"WMS-to-Raster Geospatial Data Conversion", desc:"A Python utility for converting Web Map Service imagery into raster data that can be stored locally and used in subsequent GIS workflows.", tags:["WMS","Raster","Rasterio"], url:"https://github.com/gokulrk06/WMS-to-Raster-"},
+  {title:"Urban Growth Analysis Using Multi-Temporal Remote Sensing", desc:"A group geospatial-analysis project using multi-temporal Earth observation data to quantify and visualize long-term urban expansion and land-cover change.", tags:["Urban Growth","Google Earth Engine","LULC"], url:"https://github.com/gokulrk06/Mod-6_Group_2_Urban_Growth_Project"}
+];
+
+const PUBLICATIONS = [
+  {title:"Airshed-Based Source Apportionment of Delhi Air Pollution Using WRF-Chem and Back Trajectory Analysis", venue:"ResearchGate", desc:"A source-apportionment study of Delhi's air pollution using the WRF-Chem chemical transport model combined with back-trajectory analysis to identify contributing emission sources across the Delhi airshed.", url:"https://www.researchgate.net/publication/405214474_Airshed-Based_Source_Apportionment_of_Delhi_Air_Pollution_Using_WRF-Chem_and_Back_Trajectory_Analysis"},
+  {title:"Landslide risk assessment integrating hazard, exposure, and resource-based vulnerability", venue:"In preparation", desc:"Ongoing doctoral research at CoEDMM, IIT Roorkee, developing probabilistic and Bayesian-network approaches to landslide risk modelling."}
+];
+
+/* ============ Render ============ */
+function chipRow(tags){ return tags.map(t=>`<span class="chip">${t}</span>`).join(""); }
+
+document.getElementById("projectGrid").innerHTML = FEATURED.map((p,i)=>`
+  <a class="feat-row reveal" href="${p.url}" target="_blank" rel="noopener">
+    <span class="idx">${String(i+1).padStart(2,"0")}</span>
+    <div class="info">
+      <h4>${p.title}</h4>
+      <p>${p.desc}</p>
+      <div class="chips">${chipRow(p.tags)}</div>
+    </div>
+    <span class="arrow">↗</span>
+  </a>
+`).join("");
+
+function renderCatalogue(list, targetId, startIndex){
+  document.getElementById(targetId).innerHTML = list.map((r,i)=>`
+    <a class="repo-row reveal" href="${r.url}" target="_blank" rel="noopener">
+      <span class="idx">${String(startIndex+i).padStart(2,"0")}</span>
+      <div class="info">
+        <h4>${r.title}</h4>
+        <p>${r.desc}</p>
+        <div class="chips">${chipRow(r.tags)}</div>
+      </div>
+      <span class="arrow">↗</span>
+    </a>
+  `).join("");
+}
+renderCatalogue(CATALOGUE_RESEARCH, "catalogueResearch", 1);
+
+document.getElementById("pubList").innerHTML = PUBLICATIONS.map(p=>`
+  <li>
+    <h4>${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--line);">${p.title} ↗</a>` : p.title}</h4>
+    <span class="coord">${p.venue}</span>
+    <p>${p.desc}</p>
+  </li>
+`).join("");
+
+/* ============ Nav toggle (mobile) ============ */
+const navToggle = document.getElementById("navToggle");
+const siteNav = document.getElementById("siteNav");
+navToggle.addEventListener("click", ()=> siteNav.classList.toggle("open"));
+document.querySelectorAll("#navLinks a").forEach(a=>a.addEventListener("click", ()=> siteNav.classList.remove("open")));
+
+/* ============ Theme toggle ============ */
+const themeToggle = document.getElementById("themeToggle");
+themeToggle.addEventListener("click", ()=>{
+  const html = document.documentElement;
+  const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  themeToggle.textContent = next === "dark" ? "◑" : "◐";
+});
+
+/* ============ Scroll reveal ============ */
+const revealEls = document.querySelectorAll(".reveal");
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+},{threshold:.12});
+revealEls.forEach(el=>io.observe(el));
+
+/* ============ Scrollspy ============ */
+const navAnchors = document.querySelectorAll("nav.links a[data-nav]");
+const sections = Array.from(navAnchors).map(a=>document.querySelector(a.getAttribute("href")));
+const spy = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const id = "#"+entry.target.id;
+    const link = document.querySelector(`nav.links a[href="${id}"]`);
+    if(!link) return;
+    if(entry.isIntersecting){
+      navAnchors.forEach(a=>a.classList.remove("active"));
+      link.classList.add("active");
+    }
+  });
+},{rootMargin:"-45% 0px -45% 0px"});
+sections.forEach(s=>{ if(s) spy.observe(s); });
+</script>
+</body>
+</html>
